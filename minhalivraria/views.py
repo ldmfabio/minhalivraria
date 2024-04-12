@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 
 from minhalivraria.models import Categoria, Editora, Autor, Livro
-from minhalivraria.serializers import CategoriaSerializer, EditoraSerializer, AutorSerializer, LivroSerializer, LivroDetailSerializer
+from minhalivraria.serializers import CategoriaSerializer, EditoraSerializer, AutorSerializer, LivroDetailSerializer, LivroListSerializer, LivroSerializer
 
 class CategoriaViewSet(ModelViewSet):
     queryset = Categoria.objects.all()
@@ -20,6 +20,9 @@ class LivroViewSet(ModelViewSet):
     queryset = Livro.objects.all()
 
     def get_serializer_class(self):
-        if self.action in ["list", "retrieve"]:
+        if self.action == "list":
+            return LivroListSerializer
+        elif self.action == "retrieve":  # Corrected line with single ==
             return LivroDetailSerializer
-        return LivroSerializer
+        else:
+            return LivroSerializer
